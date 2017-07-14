@@ -15,7 +15,3 @@ fun main(args: Array<String>) {
     log.info { "Starting up spring boot application ..." }
     SpringApplication.run(MyBlockchainSpringBootApplication::class.java, *args)
 }
-
-data class Transaction(
-        val id: String
-)
