@@ -6,9 +6,7 @@ import com.google.inject.Guice
 import javafx.application.Application
 import tornadofx.App
 import tornadofx.DIContainer
-import tornadofx.EventBus.RunOn.BackgroundThread
 import tornadofx.FX
-import tornadofx.FXEvent
 import kotlin.reflect.KClass
 
 private val log = LOG {}
@@ -21,7 +19,7 @@ fun main(args: Array<String>) {
 class ClientModule : AbstractModule() {
     override fun configure() {
         bind(CryptService::class.java).asEagerSingleton()
-        bind(MainController::class.java).asEagerSingleton()
+        bind(KeysController::class.java).asEagerSingleton()
     }
 }
 
@@ -35,4 +33,3 @@ class ClientTornadoApp : App(MainView::class, Styles::class) {
     }
 }
 
-object GenerateKeyPairRequest : FXEvent(BackgroundThread)

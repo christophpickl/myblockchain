@@ -61,7 +61,7 @@ class MiningService @Autowired constructor(
             }
             tries++
         }
-        log.debug { "mineBlock() ... interrupted" }
+        log.debug { "mineBlock() ... stopped" }
         return null
     }
 
