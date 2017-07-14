@@ -38,6 +38,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 
     compile "com.github.christophpickl.kpotpourri:common4k:$kpot_version"
+    compile "com.github.christophpickl.kpotpourri:logback4k:$kpot_version"
     compile "com.github.christophpickl.kpotpourri:http4k:$kpot_version"
     runtime "com.github.christophpickl.kpotpourri:http4k-apache:$kpot_version"
 
