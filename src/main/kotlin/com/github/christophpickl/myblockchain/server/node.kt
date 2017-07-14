@@ -36,13 +36,15 @@ class NodeService @Autowired constructor(
     private lateinit var self: Node
 
     override fun onApplicationEvent(event: EmbeddedServletContainerInitializedEvent) {
+        log.info { "onApplicationEvent(event)" }
+
         val masterNode = Node(URL(MASTER_NODE_ADDRESS))
         val host = http4k.get<String>(masterNode.address.toString() + "/node/ip")
         val port = event.embeddedServletContainer.port
         self = Node(URL("http", host, port, ""))
 
         if (self == masterNode) {
-            log.info { "Running as master node on: $self" }
+            log.debug { "Running as master node on: $self" }
         } else {
             knownNodes += masterNode
             knownNodes += http4k.get<List<Node>>(masterNode.address.toString() + "/node")
@@ -57,6 +59,7 @@ class NodeService @Autowired constructor(
 
     @PreDestroy
     fun shutdown() {
+        log.debug { "shutdown()" }
         broadcastPost("node/remove", self)
     }
 
@@ -64,23 +67,28 @@ class NodeService @Autowired constructor(
 
     // synchronized
     fun add(node: Node) {
+        log.debug { "add(node=$node)" }
         knownNodes.add(node)
     }
 
     // synchronized
     fun remove(node: Node) {
+        log.debug { "add(node=$node)" }
         knownNodes.remove(node)
     }
 
     // TODO type safe endpoint
     fun broadcastPut(endpoint: String, data: Any) {
+        log.debug { "broadcastPut(endpoint=$endpoint, data=$data)" }
         knownNodes.parallelStream().forEach { (address) ->
             http4k.put(address.toString() + "/" + endpoint) {
                 requestBody(data)
             }
         }
     }
+
     fun broadcastPost(endpoint: String, data: Any) {
+        log.debug { "broadcastPut(endpoint=$endpoint, data=$data)" }
         knownNodes.parallelStream().forEach { (address) ->
             http4k.post(address.toString() + "/" + endpoint) {
                 requestBody(data)
@@ -96,21 +104,26 @@ class NodeController @Autowired constructor(
         private val nodeService: NodeService
 ) {
 
+    private val log = LOG {}
+
     @RequestMapping
     fun getNodes() = nodeService.all()
 
     @RequestMapping(method = arrayOf(RequestMethod.PUT))
     fun addNode(@RequestBody node: Node) {
+        log.debug { "addNode(node=$node)" }
         nodeService.add(node)
     }
 
     @RequestMapping(path = arrayOf("remove"), method = arrayOf(RequestMethod.POST))
     internal fun removeNode(@RequestBody node: Node) {
+        log.debug { "removeNode(node=$node)" }
         nodeService.remove(node)
     }
 
     @RequestMapping(path = arrayOf("ip"))
     fun getIp(request: HttpServletRequest): String {
+        log.debug { "getIp() => ${request.remoteAddr}" }
         return request.remoteAddr
     }
 

@@ -51,13 +51,14 @@ class TransactionService @Autowired constructor(
 
     fun all(): Set<Transaction> = transactionPool
 
-    // TODO synchronized
+    // synchronized
     fun add(transaction: Transaction): Boolean {
-        log.debug { "add(transaction=$transaction)" }
         if (transaction.verify()) {
             transactionPool += transaction
+            log.debug { "add(transaction=$transaction) ... valid and added" }
             return true
         }
+        log.debug { "add(transaction=$transaction) ... invalid, skipp adding" }
         return false
     }
 
@@ -73,22 +74,22 @@ class TransactionService @Autowired constructor(
     private fun Transaction.verify(): Boolean {
         val foundSender = addressService.byHash(senderHash)
         if (foundSender == null) {
-            log.warn { "Unknown address: ${senderHash.toBase64()}" }
+            log.warn { "Transaction.verify() ... Unknown address: ${senderHash.toBase64()}" }
             return false
         }
         if (!SignatureUtils.verify(text.toByteArray(), signature, foundSender.publicKey)) {
-            log.warn { "Invalid signature." }
+            log.warn { "Transaction.verify() ... Invalid signature." }
             return false
         }
         if (!Arrays.equals(hash, calculateTransactionHash())) {
-            log.warn { "Invalid hash." }
+            log.warn { "Transaction.verify() ... Invalid hash." }
             return false
         }
         return true
     }
 
     fun synchronize(node: Node) {
-        log.debug { "syncAddresses(node=$node)" }
+        log.debug { "synchronize(node=$node)" }
         transactionPool.addAll(http4k.get<List<Transaction>>(node.address.toString() + "/transaction"))
     }
 }
@@ -101,6 +102,8 @@ class TransactionController @Autowired constructor(
         private val nodeService: NodeService
 ) {
 
+    private val log = LOG {}
+
     @RequestMapping
     fun getTransactions() = transactionService.all()
 
@@ -110,6 +113,7 @@ class TransactionController @Autowired constructor(
             @RequestParam(required = false, defaultValue = "false") publish: Boolean,
             response: HttpServletResponse
     ) {
+        log.debug {"addTransaction(transaction=$transaction, publish=$publish)"}
         val success = transactionService.add(transaction)
 
         if (success) {

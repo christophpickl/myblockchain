@@ -1,5 +1,6 @@
 package com.github.christophpickl.myblockchain.server
 
+import com.github.christophpickl.kpotpourri.common.logging.LOG
 import com.github.christophpickl.kpotpourri.http4k.buildHttp4k
 import com.github.christophpickl.kpotpourri.http4k.get
 import com.google.common.base.MoreObjects
@@ -35,6 +36,7 @@ class Address(
 @Service
 class AddressService {
 
+    private val log = LOG {}
     private val http4k = buildHttp4k {  }
     private val addresses = LinkedHashMap<String, Address>()
 
@@ -43,10 +45,12 @@ class AddressService {
     fun all() = addresses.values.toList()
 
     fun add(address: Address) {
+        log.debug { "add(address=$address)" }
         addresses[address.hash.toBase64()] = address
     }
 
     fun synchronize(node: Node) {
+        log.debug { "synchronize(node=$node)" }
         http4k.get<List<Address>>(node.address.toString() + "/address").forEach { add(it) }
     }
 }
@@ -58,6 +62,8 @@ class AddressController @Autowired constructor(
         private val nodeService: NodeService
 ) {
 
+    private val log = LOG {}
+
     @RequestMapping
     fun getAddresses() = addressService.all()
 
@@ -67,6 +73,7 @@ class AddressController @Autowired constructor(
             @RequestParam(required = false, defaultValue = "false") publish: Boolean,
             response: HttpServletResponse
     ) {
+        log.debug { "addAddress(address=$address, publish=$publish)" }
         val foundAddress = addressService.byHash(address.hash)
         if (foundAddress == null) {
             addressService.add(address)

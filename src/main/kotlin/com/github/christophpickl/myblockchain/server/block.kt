@@ -1,5 +1,6 @@
 package com.github.christophpickl.myblockchain.server
 
+import com.github.christophpickl.kpotpourri.common.logging.LOG
 import com.github.christophpickl.kpotpourri.http4k.buildHttp4k
 import com.github.christophpickl.kpotpourri.http4k.get
 import com.google.common.primitives.Longs
@@ -56,6 +57,7 @@ class BlockService @Autowired constructor(
         private val transactionService: TransactionService
 ) {
 
+    private val log = LOG {}
     private val http4k = buildHttp4k {  }
     private val blockchain = ArrayList<Block>()
 
@@ -66,15 +68,17 @@ class BlockService @Autowired constructor(
     // synchronized
     fun append(block: Block): Boolean {
         if (!block.verify()) {
+            log.debug { "append(block=$block) ... verification failed" }
             return false
         }
-
+        log.debug { "append(block=$block)" }
         blockchain.add(block)
         block.transactions.forEach { transactionService.remove(it) }
         return true
     }
 
     fun synchronize(node: Node) {
+        log.debug { "synchronize(node=$node)" }
         blockchain += http4k.get<List<Block>>(node.address.toString() + "/block")
     }
 
@@ -118,16 +122,18 @@ class BlockController @Autowired constructor(
         private val miningService: MiningService
 ) {
 
+    private val log = LOG {}
+
     @RequestMapping
     fun getBlockchain() = blockService.all()
 
     @RequestMapping(method = arrayOf(RequestMethod.PUT))
     fun addBlock(
             @RequestBody block: Block,
-            @RequestParam(required = false, defaultValue = "false")
-            publish: Boolean,
+            @RequestParam(required = false, defaultValue = "false") publish: Boolean,
             response: HttpServletResponse
     ) {
+        log.debug { "addBlock(block=$block, publish=$publish)" }
         val success = blockService.append(block)
 
         if (success) {
@@ -142,11 +148,13 @@ class BlockController @Autowired constructor(
 
     @RequestMapping(path = arrayOf("start-miner"))
     fun startMiner() {
+        log.debug { "startMiner()" }
         miningService.startMiner()
     }
 
     @RequestMapping(path = arrayOf("stop-miner"))
     fun stopMiner() {
+        log.debug { "stopMiner()" }
         miningService.stopMiner()
     }
 }
