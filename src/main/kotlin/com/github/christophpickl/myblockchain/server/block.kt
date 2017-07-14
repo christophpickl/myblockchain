@@ -3,6 +3,8 @@ package com.github.christophpickl.myblockchain.server
 import com.github.christophpickl.kpotpourri.common.logging.LOG
 import com.github.christophpickl.kpotpourri.http4k.buildHttp4k
 import com.github.christophpickl.kpotpourri.http4k.get
+import com.github.christophpickl.myblockchain.common.DIFFICULTY
+import com.github.christophpickl.myblockchain.common.MAX_TRANSACTIONS_PER_BLOCK
 import com.google.common.primitives.Longs
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

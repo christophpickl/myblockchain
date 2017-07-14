@@ -1,6 +1,8 @@
 package com.github.christophpickl.myblockchain.server
 
 import com.github.christophpickl.kpotpourri.common.logging.LOG
+import com.github.christophpickl.myblockchain.common.DIFFICULTY
+import com.github.christophpickl.myblockchain.common.MAX_TRANSACTIONS_PER_BLOCK
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.concurrent.atomic.AtomicBoolean
