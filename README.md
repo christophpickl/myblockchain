@@ -1,20 +1,19 @@
 # About
 
-Inspired by [jblockchain](https://github.com/neozo-software/jblockchain), just in order to learn rough concepts of blockchain.
+This playground is based on another GitHub project called [jblockchain](https://github.com/neozo-software/jblockchain).
+It's sole purpose is to learn the rough concepts of blockchain.
 
-## Commands
+## Endpoints
+
+| Endpoint                | Description |
+| ----------------------- | ------------
+| `GET /address` | List all registered addresses. |
+
+# Build and run
 
 
-### List registered nodes
 
+```bash
+$ ./gradlew build
+$ java -jar build/libs/myblockchain.jar [8080]
 ```
-$ curl http://localhost:8080/address
-```
-
-### Register new node
-
-```
-$ curl -H 'Content-Type: application/json' -X PUT -d '{}' http://localhost:8080/address
-```
-
-Or add `?publish=true` to broadcast all.

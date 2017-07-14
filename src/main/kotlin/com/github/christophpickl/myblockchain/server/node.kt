@@ -5,6 +5,7 @@ import com.github.christophpickl.kpotpourri.http4k.buildHttp4k
 import com.github.christophpickl.kpotpourri.http4k.get
 import com.github.christophpickl.kpotpourri.http4k.post
 import com.github.christophpickl.kpotpourri.http4k.put
+import com.github.christophpickl.myblockchain.common.MASTER_NODE_ADDRESS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.embedded.EmbeddedServletContainerInitializedEvent
 import org.springframework.context.ApplicationListener
@@ -17,7 +18,6 @@ import java.net.URL
 import javax.annotation.PreDestroy
 import javax.servlet.http.HttpServletRequest
 
-val MASTER_NODE_ADDRESS = "http://localhost:8080"
 
 data class Node(
         val address: URL

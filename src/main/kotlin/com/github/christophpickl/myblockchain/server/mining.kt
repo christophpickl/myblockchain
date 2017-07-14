@@ -5,9 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.concurrent.atomic.AtomicBoolean
 
-val MAX_TRANSACTIONS_PER_BLOCK = 5
-val DIFFICULTY = 3
-
 
 @Service
 class MiningService @Autowired constructor(
