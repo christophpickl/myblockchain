@@ -1,0 +1,35 @@
+
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+
+management:
+    security:
+      enabled: false
+    context-path: /management
+
+spring:
+    application:
+        name: myblockchain
+    devtools:
+        restart:
+            enabled: false
+        livereload:
+            enabled: false
+    jackson:
+      default-property-inclusion: non_null
+      serialization:
+        indent-output: true
+        write-dates-as-timestamps: false
+        write-date-timestamps-as-nanoseconds: false
+        write-empty-json-arrays: false
+      deserialization:
+        fail-on-unknown-properties: false
+        read-unknown-enum-values-using-default-value: true
+
+server:
+    port: 8080
+    compression:
+        enabled: true
+    session:
+        cookie:
+            http-only: true
+
