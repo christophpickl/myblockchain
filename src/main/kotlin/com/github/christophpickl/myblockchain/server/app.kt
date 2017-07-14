@@ -1,4 +1,4 @@
-package com.github.christophpickl.myblockchain
+package com.github.christophpickl.myblockchain.server
 
 import com.github.christophpickl.kpotpourri.common.logging.LOG
 import org.springframework.boot.SpringApplication
@@ -14,20 +14,6 @@ class MyBlockchainSpringBootApplication
 fun main(args: Array<String>) {
     log.info { "Starting up spring boot application ..." }
     SpringApplication.run(MyBlockchainSpringBootApplication::class.java, *args)
-}
-
-@RestController
-class MyController {
-    @RequestMapping("/")
-    fun index(): String {
-        return "hallo"
-    }
-
-    @RequestMapping("/transaction")
-    fun transaction() = listOf(
-            Transaction("id1"),
-            Transaction("id2")
-    )
 }
 
 data class Transaction(
