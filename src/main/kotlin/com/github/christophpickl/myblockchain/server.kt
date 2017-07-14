@@ -1,15 +1,19 @@
 package com.github.christophpickl.myblockchain
 
+import com.github.christophpickl.kpotpourri.common.logging.LOG
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+private val log = LOG {}
+
 @SpringBootApplication
-class MyApplication
+class MyBlockchainSpringBootApplication
 
 fun main(args: Array<String>) {
-    SpringApplication.run(MyApplication::class.java, *args)
+    log.info { "Starting up spring boot application ..." }
+    SpringApplication.run(MyBlockchainSpringBootApplication::class.java, *args)
 }
 
 @RestController
