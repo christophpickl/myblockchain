@@ -18,5 +18,6 @@ fun main(args: Array<String>) {
             .sources(MyBlockchainSpringBootApplication::class.java)
             .bannerMode(Banner.Mode.OFF)
             .properties(hashMapOf<String, Any>("server.port" to port))
+            .profiles("PROD")
             .run(*args)
 }

@@ -1,27 +1,34 @@
 package com.github.christophpickl.myblockchain.cucumber
 
-import cucumber.api.CucumberOptions
+import com.github.christophpickl.kpotpourri.http4k.Http4k
+import com.github.christophpickl.kpotpourri.http4k.Response4k
+import com.github.christophpickl.kpotpourri.http4k.buildHttp4k
+import com.github.christophpickl.kpotpourri.http4k.get
+import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.equalTo
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import cucumber.api.junit.Cucumber
-import org.junit.runner.RunWith
 
 // https://github.com/deadmoto/kotlin-cucumber-example/blob/master/src/test/kotlin/CucumberTest.kt
 
-class MyStepdefs {
-    @When("^the step is implemented$")
-    fun `When the step is implemented`() {
-        println("when the")
-    }
-    @Then("^the next step is executed$")
-    fun `Then the next step is executed`() {
-        println("then next")
-    }
-}
+class NodeStepdefs {
 
-@RunWith(Cucumber::class)
-@CucumberOptions(
-        format = arrayOf("pretty"),
-//        glue = arrayOf("com.lunivore.montecarluni.glue"),
-        features = arrayOf("."))
-class Runner
+    private val http4k: Http4k by lazy {
+        buildHttp4k {
+            baseUrlBy("http://localhost:8080")
+        }
+    }
+
+    private lateinit var recentResponse: Response4k
+    @When("^execute (.*) (.*)$")
+    fun `When execute some HTTP request`(method: String, url: String) {
+        // TODO support http4k method as param
+        recentResponse = http4k.get(url)
+    }
+
+    @Then("^the response body is equal to '(.*)'$")
+    fun `Then the response body is equal to _`(expectedBody: String) {
+        assertThat(recentResponse.bodyAsString, equalTo(expectedBody))
+    }
+
+}
