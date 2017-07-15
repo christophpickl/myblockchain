@@ -81,6 +81,9 @@ class NodeService @Autowired constructor(
     fun broadcastPut(endpoint: String, data: Any) {
         log.debug { "broadcastPut(endpoint=$endpoint, data=$data)" }
         knownNodes.parallelStream().forEach { (address) ->
+            // TODO make http4k support passing an URL instance (with optional additional suffix)
+            // TODO make http4k support passing a HttpMethod instance
+            // TODO make http4k support DELETE with request body (???)
             http4k.put(address.toString() + "/" + endpoint) {
                 requestBody(data)
             }
@@ -97,7 +100,7 @@ class NodeService @Autowired constructor(
     }
 
 }
-
+// TODO write spring IT
 @RestController
 @RequestMapping("node")
 class NodeController @Autowired constructor(
@@ -115,6 +118,7 @@ class NodeController @Autowired constructor(
         nodeService.add(node)
     }
 
+    // TODO change to HTTP delete (support request body in HTTP4K)
     @RequestMapping(path = arrayOf("remove"), method = arrayOf(RequestMethod.POST))
     internal fun removeNode(@RequestBody node: Node) {
         log.debug { "removeNode(node=$node)" }

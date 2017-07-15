@@ -11,7 +11,14 @@ import com.github.christophpickl.myblockchain.server.Block
 import com.github.christophpickl.myblockchain.server.Node
 import com.github.christophpickl.myblockchain.server.Transaction
 
-class BlockchainClient(serverBaseUrl: String = "http://localhost:8080") {
+class BlockchainClient(
+//        serverBaseUrl: UrlConfig = UrlConfig(
+//                protocol = HttpProtocol.Http,
+//                hostName = "localhost",
+//                port = 8080
+//        )
+        serverBaseUrl: String = "http://localhost:8080"
+) {
 
     private val http4k = buildHttp4k {
         baseUrlBy(serverBaseUrl)
