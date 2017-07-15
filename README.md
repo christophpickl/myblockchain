@@ -5,20 +5,20 @@ It's sole purpose is to learn the rough concepts of blockchain.
 
 ## Endpoints
 
-| Endpoint                 | Description                     |
-| ------------------------ | ------------------------------- |
-| `GET /address`           | List all registered addresses.  |
-| `PUT /address`           | Register new address.  |
-| `GET /block`             | List all mined blocks.  |
-| `PUT /block`*             | Register mined block.  |
-| `GET /block/start-miner` | Start background mining thread on this node.  |
-| `GET /block/stop-miner` | Stop thread on next cycle.  |
-| `GET /node`             | List all known other nodes.  |
-| `PUT /node`*             | Register new node.  |
-| `POST /node/remove`*             | Unregister node.  |
-| `GET /node/ip`*             | Get the IP address of the current node. |
-| `GET /transaction`           | List all transactions in the current pool.  |
-| `PUT /transaction`           | Add new transaction.  |
+| Endpoint                 | Description                                  | Code     |
+| ------------------------ | -------------------------------------------- | -------- |
+| `GET /address`           | List all registered addresses.               |  200     |
+| `PUT /address`           | Register new address.                        |  202/406 |
+| `GET /block`             | List all mined blocks.                       |  200     |
+| `PUT /block`*            | Register mined block.                        |  202/406 |
+| `GET /block/start-miner` | Start background mining thread on this node. |  200     |
+| `GET /block/stop-miner`  | Stop thread on next cycle.                   |  200     |
+| `GET /node`              | List all known other nodes.                  |  200     |
+| `PUT /node`*             | Register new node.                           |  200     |
+| `POST /node/remove`*     | Unregister node.                             |  200     |
+| `GET /node/ip`*          | Get the IP address of the current node.      |  200     |
+| `GET /transaction`       | List all transactions in the current pool.   |  200     |
+| `PUT /transaction`       | Add new transaction.                         |  202/406 |
 
 `*` ... Intended to be invoked only internally by the blockchain's nodes.
 

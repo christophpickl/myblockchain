@@ -5,6 +5,9 @@ import com.github.christophpickl.kpotpourri.http4k.buildHttp4k
 import com.github.christophpickl.kpotpourri.http4k.get
 import com.github.christophpickl.myblockchain.common.DIFFICULTY
 import com.github.christophpickl.myblockchain.common.MAX_TRANSACTIONS_PER_BLOCK
+import com.github.christophpickl.myblockchain.common.leadingZerosCount
+import com.github.christophpickl.myblockchain.common.toPrettyString
+import com.google.common.base.MoreObjects
 import com.google.common.primitives.Longs
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -13,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import java.util.ArrayList
+import java.util.Arrays
 import javax.servlet.http.HttpServletResponse
 
 class Block(
@@ -37,21 +41,20 @@ class Block(
     fun calculateBlockHash() =
             calculateHash(previousBlockHash ?: ByteArray(0), merkleRoot, Longs.toByteArray(tries), Longs.toByteArray(timestamp))
 
-    fun getLeadingZerosCount(): Int {
-        for (i in 0..hash.size - 1) {
-            if (hash[i].toInt() != 0) {
-                return i
-            }
-        }
-        return hash.size
-    }
-
     override fun equals(other: Any?): Boolean {
         if (other !is Block) return false
         return Arrays.equals(hash, other.hash)
     }
 
     override fun hashCode() = Arrays.hashCode(hash)
+
+    override fun toString() = MoreObjects.toStringHelper(this)
+            .add("timestamp", timestamp)
+            .add("hash", hash.toPrettyString())
+            .add("tries", tries)
+            .add("transactions", transactions)
+            .add("previousBlockHash", previousBlockHash?.toPrettyString())
+            .toString()
 }
 
 @Service
@@ -108,7 +111,7 @@ class BlockService @Autowired constructor(
         if (!transactionService.containsAll(transactions)) {
             return false
         }
-        if (getLeadingZerosCount() < DIFFICULTY) {
+        if (hash.leadingZerosCount() < DIFFICULTY) {
             return false
         }
         return true

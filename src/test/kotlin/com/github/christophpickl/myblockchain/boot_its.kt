@@ -6,6 +6,7 @@ import com.github.christophpickl.kpotpourri.http4k.get
 import com.github.christophpickl.myblockchain.server.MyBlockchainSpringBootApplication
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.boot.test.context.SpringBootTest
@@ -29,6 +30,7 @@ class FooIT {
     }
 
     @Test
+    @Ignore // would need to startup a running local server first
     fun `GET node ip - should return localhost's IP address`() {
        assertThat(http4k.get<String>("/node/ip"),
                equalTo("127.0.0.1"))
