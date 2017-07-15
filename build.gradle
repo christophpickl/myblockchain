@@ -56,8 +56,10 @@ dependencies {
     }
     compile "org.springframework.boot:spring-boot-starter-jetty"
     compile "org.springframework.boot:spring-boot-starter-actuator"
-    testCompile "org.springframework.boot:spring-boot-starter-test"
     compile "commons-codec:commons-codec:1.4"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    compile 'info.cukes:cucumber-java8:1.2.5'
+    compile 'info.cukes:cucumber-junit:1.2.5'
 }
 
 compileKotlin {
