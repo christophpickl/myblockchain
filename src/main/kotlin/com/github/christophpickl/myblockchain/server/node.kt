@@ -73,7 +73,7 @@ class NodeService @Autowired constructor(
 
     // synchronized
     fun remove(node: Node) {
-        log.debug { "add(node=$node)" }
+        log.debug { "remove(node=$node)" }
         knownNodes.remove(node)
     }
 
