@@ -3,6 +3,7 @@ package com.github.christophpickl.myblockchain.server
 import com.github.christophpickl.kpotpourri.common.logging.LOG
 import com.github.christophpickl.myblockchain.common.DIFFICULTY
 import com.github.christophpickl.myblockchain.common.MAX_TRANSACTIONS_PER_BLOCK
+import com.github.christophpickl.myblockchain.common.leadingZerosCount
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.concurrent.atomic.AtomicBoolean
@@ -21,7 +22,7 @@ class MiningService @Autowired constructor(
     fun startMiner() {
         if (runMiner.compareAndSet(false, true)) {
             log.debug { "startMiner()" }
-            Thread(this).start()
+            Thread(this, "mine-thread").start()
         } else {
             log.debug { "startMiner() ... already started" }
         }
@@ -34,6 +35,7 @@ class MiningService @Autowired constructor(
     }
 
     override fun run() {
+        log.debug { "Mining thread started." }
         while (runMiner.get()) {
             val block = mineBlock()
             if (block != null) {
@@ -47,7 +49,7 @@ class MiningService @Autowired constructor(
         val previousBlockHash = blockService.lastBlock?.hash
         val transactions = transactionService.all().take(MAX_TRANSACTIONS_PER_BLOCK)
         if (transactions.isEmpty()) {
-            log.debug { "mineBlock() ... sleeping as of empty transactions" }
+            log.trace { "mineBlock() ... sleeping as of empty transactions" }
             Thread.sleep(10_000)
             return null
         }
@@ -55,7 +57,7 @@ class MiningService @Autowired constructor(
         var tries = 0L
         while (runMiner.get()) {
             val block = Block(previousBlockHash, transactions, tries)
-            if (block.getLeadingZerosCount() >= DIFFICULTY) {
+            if (block.hash.leadingZerosCount() >= DIFFICULTY) {
                 log.debug { "mineBlock() ... found block with proper difficulty" }
                 return block
             }

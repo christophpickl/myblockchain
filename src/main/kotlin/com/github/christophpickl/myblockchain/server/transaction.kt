@@ -4,6 +4,8 @@ import com.github.christophpickl.kpotpourri.common.logging.LOG
 import com.github.christophpickl.kpotpourri.http4k.buildHttp4k
 import com.github.christophpickl.kpotpourri.http4k.get
 import com.github.christophpickl.myblockchain.common.SignatureUtils
+import com.github.christophpickl.myblockchain.common.encodeBase64
+import com.github.christophpickl.myblockchain.common.toPrettyString
 import com.google.common.base.MoreObjects
 import com.google.common.primitives.Longs
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import java.util.Arrays
+import java.util.HashSet
 import javax.servlet.http.HttpServletResponse
 
 
@@ -37,6 +40,10 @@ class Transaction(
 
     override fun toString() = MoreObjects.toStringHelper(this)
             .add("text", text)
+            .add("timestamp", timestamp)
+            .add("hash", hash.toPrettyString())
+            .add("senderHash", senderHash.toPrettyString())
+            .add("signature", signature.toPrettyString())
             .toString()
 }
 
@@ -74,7 +81,7 @@ class TransactionService @Autowired constructor(
     private fun Transaction.verify(): Boolean {
         val foundSender = addressService.byHash(senderHash)
         if (foundSender == null) {
-            log.warn { "Transaction.verify() ... Unknown address: ${senderHash.toBase64()}" }
+            log.warn { "Transaction.verify() ... Unknown address: ${senderHash.encodeBase64()}" }
             return false
         }
         if (!SignatureUtils.verify(text.toByteArray(), signature, foundSender.publicKey)) {
@@ -121,6 +128,7 @@ class TransactionController @Autowired constructor(
                 nodeService.broadcastPut("transaction", transaction)
             }
             response.status = HttpServletResponse.SC_ACCEPTED
+            // TODO @http4k: always add descriptive text to status codes (Http4kStatusCodeException message e.g.)
         } else {
             response.status = HttpServletResponse.SC_NOT_ACCEPTABLE
         }

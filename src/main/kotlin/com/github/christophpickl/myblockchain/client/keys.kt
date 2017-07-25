@@ -4,11 +4,8 @@ import com.github.christophpickl.kpotpourri.common.logging.LOG
 import com.github.christophpickl.myblockchain.common.SignatureUtils
 import com.google.inject.Inject
 import javafx.scene.control.Alert.AlertType.INFORMATION
-import tornadofx.Controller
+import tornadofx.*
 import tornadofx.EventBus.RunOn.BackgroundThread
-import tornadofx.FXEvent
-import tornadofx.alert
-import tornadofx.runLater
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -26,10 +23,21 @@ class KeysController @Inject constructor(
 
     init {
         subscribe<GenerateKeyPairRequest> {
-            logg.debug("subscribed event dispatched: GenerateKeyPairRequest")
+            logg.debug("event dispatched: GenerateKeyPairRequest")
             val (keyPrivate, keyPublic) = cryptService.createKeys()
             mainView.pathKeyPrivate.textBy(keyPrivate)
             mainView.pathKeyPublic.textBy(keyPublic)
+
+            runLater {
+                alert(
+                        type = INFORMATION,
+                        header = "Keys generated successfully",
+                        content = "Saved keys to:" +
+                                // parent == null :(
+                                "\n${keyPrivate.toFile().absolutePath}" +
+                                "\n${keyPublic.toFile().absolutePath}"
+                )
+            }
         }
     }
 
@@ -47,16 +55,6 @@ class CryptService {
         val keyPublic = Paths.get("key.pub")
         Files.write(keyPrivate, keyPair.private.encoded)
         Files.write(keyPublic, keyPair.public.encoded)
-        runLater {
-            alert(
-                    type = INFORMATION,
-                    header = "Keys generated successfully",
-                    content = "Saved keys to:" +
-                            // parent == null :(
-                            "\n${keyPrivate.toFile().absolutePath}" +
-                            "\n${keyPublic.toFile().absolutePath}"
-            )
-        }
         return Pair(keyPrivate, keyPublic)
     }
 }

@@ -3,6 +3,8 @@ package com.github.christophpickl.myblockchain.server
 import com.github.christophpickl.kpotpourri.common.logging.LOG
 import com.github.christophpickl.kpotpourri.http4k.buildHttp4k
 import com.github.christophpickl.kpotpourri.http4k.get
+import com.github.christophpickl.myblockchain.common.encodeBase64
+import com.github.christophpickl.myblockchain.common.toPrettyString
 import com.google.common.base.MoreObjects
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -11,9 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import java.util.Arrays
 import javax.servlet.http.HttpServletResponse
-import kotlin.collections.LinkedHashMap
 
 class Address(
         val name: String,
@@ -30,6 +31,7 @@ class Address(
 
     override fun toString() = MoreObjects.toStringHelper(this)
             .add("name", name)
+            .add("publicKey", publicKey.toPrettyString())
             .toString()
 }
 
@@ -40,13 +42,13 @@ class AddressService {
     private val http4k = buildHttp4k {  }
     private val addresses = LinkedHashMap<String, Address>()
 
-    fun byHash(hash: ByteArray) = addresses[hash.toBase64()]
+    fun byHash(hash: ByteArray) = addresses[hash.encodeBase64()]
 
     fun all() = addresses.values.toList()
 
     fun add(address: Address) {
         log.debug { "add(address=$address)" }
-        addresses[address.hash.toBase64()] = address
+        addresses[address.hash.encodeBase64()] = address
     }
 
     fun synchronize(node: Node) {
