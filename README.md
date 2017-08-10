@@ -26,21 +26,17 @@ It's sole purpose is to learn the rough concepts of blockchain by implementing s
 
 | Data Object | Property     | Type          | Description                                    |
 | ----------- | ------------ | ------------- | ---------------------------------------------- |
-| Address     |              |               | Represents a user.                             |
-|             | name         | String        | The human readable name.                       |
+| Address     | name         | String        | The human readable name.                       |
 |             | public key   | Byte[]        | Public part of the generated key pair.         |
 |             | hash         | Byte[]        | Hash of name and public key.                   |
-| Node        |              |               |                                                |
-|             | address      | URL           | The IP and port of the node.                   |
-| Block       |              |               |                                                |
-|             | previous     | Byte[]?       | Hash of the previous block.                    |
+| Node        | address      | URL           | The IP and port of the node.                   |
+| Block       | previous     | Byte[]?       | Hash of the previous block.                    |
 |             | transactions | Transaction[] | List of transactions in this block.            |
 |             | tries        | Number        | How many cycles did the mining take.           |
 |             | timestamp    | DateTime      | Date of creation.                              |
 |             | merkle root  | Byte[]        | Hash over all transaction hashes.              |
 |             | hash         | Byte[]        | Hash of previous, merkle, tries and timestamp. |
-| Transaction |              |               |                                                |
-|             | text         | String        | The actual payload, chat message in this case. |
+| Transaction | text         | String        | The actual payload, chat message in this case. |
 |             | sender       | Byte[]        | The `Address.hash` which created this tx.      |
 |             | signature    | Byte[]        | The signed `text` hashed with the private key. |
 |             | timestamp    | DateTime      | Date of creation.                              |
