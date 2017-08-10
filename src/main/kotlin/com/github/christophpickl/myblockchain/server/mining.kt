@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.concurrent.atomic.AtomicBoolean
 
-
 @Service
 class MiningService @Autowired constructor(
         private val transactionService: TransactionService,
@@ -26,7 +25,6 @@ class MiningService @Autowired constructor(
         } else {
             log.debug { "startMiner() ... already started" }
         }
-
     }
 
     fun stopMiner() {
@@ -46,15 +44,14 @@ class MiningService @Autowired constructor(
     }
 
     private fun mineBlock(): Block? {
-        val previousBlockHash = blockService.lastBlock?.hash
         val transactions = transactionService.all().take(MAX_TRANSACTIONS_PER_BLOCK)
         if (transactions.isEmpty()) {
             log.trace { "mineBlock() ... sleeping as of empty transactions" }
             Thread.sleep(10_000)
             return null
         }
-
         var tries = 0L
+        val previousBlockHash = blockService.lastBlock?.hash
         while (runMiner.get()) {
             val block = Block(previousBlockHash, transactions, tries)
             if (block.hash.leadingZerosCount() >= DIFFICULTY) {

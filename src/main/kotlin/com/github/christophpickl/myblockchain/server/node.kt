@@ -47,7 +47,7 @@ class NodeService @Autowired constructor(
             log.debug { "Running as master node on: $self" }
         } else {
             knownNodes += masterNode
-            knownNodes += http4k.get<List<Node>>(masterNode.address.toString() + "/node")
+            knownNodes += http4k.get<List<Node>>("${masterNode.address}/node")
 
             addressService.synchronize(masterNode)
             blockService.synchronize(masterNode)
@@ -65,13 +65,11 @@ class NodeService @Autowired constructor(
 
     fun all(): Set<Node> = knownNodes
 
-    // synchronized
     fun add(node: Node) {
         log.debug { "add(node=$node)" }
         knownNodes.add(node)
     }
 
-    // synchronized
     fun remove(node: Node) {
         log.debug { "remove(node=$node)" }
         knownNodes.remove(node)
@@ -100,7 +98,7 @@ class NodeService @Autowired constructor(
     }
 
 }
-// TODO write spring IT
+
 @RestController
 @RequestMapping("node")
 class NodeController @Autowired constructor(

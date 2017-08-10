@@ -70,7 +70,6 @@ class BlockService @Autowired constructor(
 
     fun all(): List<Block> = blockchain
 
-    // synchronized
     fun append(block: Block): Boolean {
         if (!block.verify()) {
             log.debug { "append(block=$block) ... verification failed" }
