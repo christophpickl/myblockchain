@@ -59,11 +59,6 @@ fun main(args: Array<String>) {
 }
 
 class BlockchainClient(
-//        serverBaseUrl: UrlConfig = UrlConfig(
-//                protocol = HttpProtocol.Http,
-//                hostName = "localhost",
-//                port = 8080
-//        )
         serverBaseUrl: String = "http://localhost:8080"
 ) {
 
@@ -71,6 +66,8 @@ class BlockchainClient(
         baseUrlBy(serverBaseUrl)
         enforceStatusCheck(SC_200_Ok)
     }
+
+    fun executeGet(url: String) = http4k.get<Response4k>(url)
 
     fun getAddresses(): List<Address> = http4k.get("/address")
 

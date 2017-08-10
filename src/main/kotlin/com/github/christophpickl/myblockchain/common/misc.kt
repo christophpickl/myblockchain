@@ -1,8 +1,12 @@
 package com.github.christophpickl.myblockchain.common
 
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.apache.commons.codec.binary.Base64
 import java.io.File
 import java.nio.file.Files
+
+val objectMapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
 fun File.toBytes() = Files.readAllBytes(toPath())
 

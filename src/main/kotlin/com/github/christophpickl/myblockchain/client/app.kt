@@ -19,7 +19,9 @@ fun main(args: Array<String>) {
 class ClientModule : AbstractModule() {
     override fun configure() {
         bind(CryptService::class.java).asEagerSingleton()
+        bind(GeneralController::class.java).asEagerSingleton()
         bind(KeysController::class.java).asEagerSingleton()
+        bind(BlockchainClient::class.java).asEagerSingleton()
     }
 }
 

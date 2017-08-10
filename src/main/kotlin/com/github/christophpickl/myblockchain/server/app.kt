@@ -16,7 +16,9 @@ fun main(args: Array<String>) {
     SpringApplicationBuilder()
             .sources(MyBlockchainSpringBootApplication::class.java)
             .bannerMode(Banner.Mode.OFF)
-            .properties(hashMapOf<String, Any>("server.port" to port))
-            .profiles("PROD")
+            .properties(hashMapOf<String, Any>(
+                    "server.port" to port,
+                    "spring.profiles.active" to "default"
+            ))
             .run(*args)
 }
