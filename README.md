@@ -32,7 +32,6 @@ It's sole purpose is to learn the rough concepts of blockchain by implementing s
 | Node        | address      | URL           | The IP and port of the node.                   |
 | Block       | previous     | Byte[]?       | Hash of the previous block.                    |
 |             | transactions | Transaction[] | List of transactions in this block.            |
-|             | tries        | Number        | How many cycles did the mining take.           |
 |             | timestamp    | DateTime      | Date of creation.                              |
 |             | merkle root  | Byte[]        | Hash over all transaction hashes.              |
 |             | hash         | Byte[]        | Hash of previous, merkle, tries and timestamp. |
