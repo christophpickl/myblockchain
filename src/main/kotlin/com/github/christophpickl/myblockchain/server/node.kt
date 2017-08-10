@@ -44,7 +44,7 @@ class NodeService @Autowired constructor(
         self = Node(URL("http", host, port, ""))
 
         if (self == masterNode) {
-            // Running as master node
+            log.debug { "Running as master node as: $self" }
         } else {
             knownNodes += masterNode
             knownNodes += http4k.get<List<Node>>("${masterNode.address}/node")
@@ -78,7 +78,7 @@ class NodeService @Autowired constructor(
     fun broadcastPut(endpoint: String, data: Any) {
         log.debug { "broadcastPut(endpoint=$endpoint, data=$data)" }
         knownNodes.parallelStream().forEach { (address) ->
-            http4k.put(address.toString() + "/" + endpoint) {
+            http4k.put("$address/$endpoint") {
                 requestBody(data)
             }
         }
@@ -87,7 +87,7 @@ class NodeService @Autowired constructor(
     fun broadcastPost(endpoint: String, data: Any) {
         log.debug { "broadcastPut(endpoint=$endpoint, data=$data)" }
         knownNodes.parallelStream().forEach { (address) ->
-            http4k.post(address.toString() + "/" + endpoint) {
+            http4k.post("$address/$endpoint") {
                 requestBody(data)
             }
         }
