@@ -50,7 +50,6 @@ class CryptService {
     fun createKeys(): Pair<Path, Path> {
         log.info("createKeys()")
         val keyPair = SignatureUtils.generateKeyPair()
-        // TODO save dialog
         val keyPrivate = Paths.get("key.priv")
         val keyPublic = Paths.get("key.pub")
         Files.write(keyPrivate, keyPair.private.encoded)

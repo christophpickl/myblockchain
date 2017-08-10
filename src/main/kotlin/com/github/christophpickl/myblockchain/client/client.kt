@@ -34,7 +34,7 @@ fun main(args: Array<String>) {
     }
     val client = BlockchainClient()
     if (false) {
-        // FIXME ClassCastException: java.util.LinkedHashMap cannot be cast to com.github.christophpickl.myblockchain.server.Transaction
+        // ClassCastException: java.util.LinkedHashMap cannot be cast to com.github.christophpickl.myblockchain.server.Transaction
         val tx = client.getTransactions()[0]
         println(tx)
 

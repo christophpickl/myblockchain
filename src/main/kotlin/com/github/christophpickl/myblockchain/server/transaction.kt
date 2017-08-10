@@ -128,7 +128,6 @@ class TransactionController @Autowired constructor(
                 nodeService.broadcastPut("transaction", transaction)
             }
             response.status = HttpServletResponse.SC_ACCEPTED
-            // TODO @http4k: always add descriptive text to status codes (Http4kStatusCodeException message e.g.)
         } else {
             response.status = HttpServletResponse.SC_NOT_ACCEPTABLE
         }
