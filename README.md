@@ -3,6 +3,25 @@
 This playground is based on another GitHub project called [jblockchain](https://github.com/neozo-software/jblockchain).
 It's sole purpose is to learn the rough concepts of blockchain by implementing some kind of public chat.
 
+## Build and run
+
+### Run a server node
+
+You can either run a server directly by starting the main method in the `com.github.christophpickl.myblockchain.server` package within the `app.kt` file, 
+or alternatively run multiple instances from the command line:
+
+```bash
+$ ./gradlew build
+$ java -jar build/libs/myblockchain.jar [8080]
+```
+
+You need to run at least one node on the default port 8080 as it represents the master node, which
+is required for running any further nodes as they will try to connect to that one.
+
+### Run the client
+
+There is a simple Java UI you can run which resides in the `com.github.christophpickl.myblockchain.client` package within the `app.kt` file.
+ 
 ## Endpoints
 
 | Endpoint                 | Description                                  | Code     |
@@ -26,31 +45,17 @@ It's sole purpose is to learn the rough concepts of blockchain by implementing s
 
 | Data Object | Property     | Type          | Description                                    |
 | ----------- | ------------ | ------------- | ---------------------------------------------- |
+| Node        | address      | URL           | The IP and port of the node.                   |
 | Address     | name         | String        | The human readable name.                       |
 |             | public key   | Byte[]        | Public part of the generated key pair.         |
 |             | hash         | Byte[]        | Hash of name and public key.                   |
-| Node        | address      | URL           | The IP and port of the node.                   |
-| Block       | previous     | Byte[]?       | Hash of the previous block.                    |
-|             | transactions | Transaction[] | List of transactions in this block.            |
-|             | timestamp    | DateTime      | Date of creation.                              |
-|             | merkle root  | Byte[]        | Hash over all transaction hashes.              |
-|             | hash         | Byte[]        | Hash of previous, merkle, tries and timestamp. |
 | Transaction | text         | String        | The actual payload, chat message in this case. |
 |             | sender       | Byte[]        | The `Address.hash` which created this tx.      |
 |             | signature    | Byte[]        | The signed `text` hashed with the private key. |
 |             | timestamp    | DateTime      | Date of creation.                              |
 |             | hash         | Byte[]        | Hash of all attributes.                        |
-
-# Build and run
-
-```bash
-$ ./gradlew build
-$ java -jar build/libs/myblockchain.jar [8080]
-```
-
-You need to run at least one node on the default port 8080 as it represents the master node, which
-is required for running any further nodes as they will try to connect that one.
-
-# Further reading
-
-* Interesting [article on heise.de](https://www.heise.de/solutions/ibm-blockchain/wie-blockchains-fuer-mehr-vertrauen-in-der-lieferkette-sorgen-koennen/) about usecases of this technology (German) 
+| Block       | previous     | Byte[]?       | Hash of the previous block.                    |
+|             | transactions | Transaction[] | List of transactions in this block.            |
+|             | timestamp    | DateTime      | Date of creation.                              |
+|             | merkle root  | Byte[]        | Hash over all transaction hashes.              |
+|             | hash         | Byte[]        | Hash of previous, merkle, tries and timestamp. |
