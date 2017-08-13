@@ -1,6 +1,5 @@
 package com.github.christophpickl.myblockchain.client
 
-import ch.qos.logback.classic.Level
 import com.github.christophpickl.kpotpourri.http4k.Response4k
 import com.github.christophpickl.kpotpourri.http4k.SC_200_Ok
 import com.github.christophpickl.kpotpourri.http4k.SC_202_Accepted
@@ -8,11 +7,6 @@ import com.github.christophpickl.kpotpourri.http4k.buildHttp4k
 import com.github.christophpickl.kpotpourri.http4k.get
 import com.github.christophpickl.kpotpourri.http4k.post
 import com.github.christophpickl.kpotpourri.http4k.put
-import com.github.christophpickl.kpotpourri.logback4k.Logback4k
-import com.github.christophpickl.myblockchain.common.SignatureUtils
-import com.github.christophpickl.myblockchain.common.encodeBase64
-import com.github.christophpickl.myblockchain.common.toBytes
-import com.github.christophpickl.myblockchain.common.toPrettyString
 import com.github.christophpickl.myblockchain.server.Address
 import com.github.christophpickl.myblockchain.server.Block
 import com.github.christophpickl.myblockchain.server.Node
@@ -21,41 +15,6 @@ import java.io.File
 
 val keyPriv = File("key.priv")
 val keyPub = File("key.pub")
-
-fun main(args: Array<String>) {
-    Logback4k.reconfigure {
-        rootLevel = Level.WARN
-        packageLevel(Level.ALL,
-                "com.github.christophpickl.myblockchain",
-                "com.github.christophpickl.kpotpourri.http4k"
-        )
-        addConsoleAppender()
-    }
-    val client = BlockchainClient()
-    if (false) {
-        // ClassCastException: java.util.LinkedHashMap cannot be cast to com.github.christophpickl.myblockchain.server.Transaction
-        val tx = client.getTransactions()[0]
-        println(tx)
-
-//        client.getBlockchain().prettyPrint()
-//        client.stopMiner()
-        return
-    }
-//    CryptService().createKeys()
-
-    val pubBytes = keyPub.toBytes()
-    val privBytes = keyPriv.toBytes()
-    println("Pub hash: ${pubBytes.encodeBase64()}")
-    val address = Address("myName", pubBytes)
-    println("Address hash: ${address.hash.toPrettyString()}")
-    client.addAddress(address)
-
-    val sender = address.hash
-    val text = "myTxText"
-    val signature = SignatureUtils.sign(text.toByteArray(), privBytes)
-    client.addTransaction(Transaction(text, sender, signature))
-
-}
 
 class BlockchainClient(
         serverBaseUrl: String = "http://localhost:8080"

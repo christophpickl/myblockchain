@@ -10,6 +10,7 @@ import java.security.spec.X509EncodedKeySpec
 
 
 object SignatureUtils {
+
     private val keyFactory = KeyFactory.getInstance("DSA", "SUN")
     private val signatureAlgorithm = Signature.getInstance("SHA1withDSA", "SUN")
 

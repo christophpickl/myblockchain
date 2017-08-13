@@ -19,7 +19,6 @@ import java.util.Arrays
 import java.util.HashSet
 import javax.servlet.http.HttpServletResponse
 
-
 class Transaction(
         val text: String,
         val senderHash: ByteArray,
