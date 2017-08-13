@@ -24,13 +24,12 @@ val keyPub = File("key.pub")
 
 fun main(args: Array<String>) {
     Logback4k.reconfigure {
-        addConsoleAppender {
-            rootLevel = Level.WARN
-            packageLevel(Level.ALL,
-                    "com.github.christophpickl.myblockchain",
-                    "com.github.christophpickl.kpotpourri.http4k"
-            )
-        }
+        rootLevel = Level.WARN
+        packageLevel(Level.ALL,
+                "com.github.christophpickl.myblockchain",
+                "com.github.christophpickl.kpotpourri.http4k"
+        )
+        addConsoleAppender()
     }
     val client = BlockchainClient()
     if (false) {

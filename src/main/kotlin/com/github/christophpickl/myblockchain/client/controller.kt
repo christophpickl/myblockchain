@@ -4,9 +4,8 @@ import com.github.christophpickl.myblockchain.common.SignatureUtils
 import com.github.christophpickl.myblockchain.server.Address
 import com.github.christophpickl.myblockchain.server.Transaction
 import com.google.inject.Inject
-import tornadofx.Controller
+import tornadofx.*
 import tornadofx.EventBus.RunOn.BackgroundThread
-import tornadofx.FXEvent
 import java.io.File
 
 object ListNodesRequest : FXEvent(BackgroundThread)
